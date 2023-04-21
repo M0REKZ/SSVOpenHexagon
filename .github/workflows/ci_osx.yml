@@ -47,11 +47,11 @@ jobs:
 
     - name: Make app bundle
       run: |
-        mkdir -p ./_RELEASE/Open\ Hexagon.app/Contents/Resources
-        cp -R ./_RELEASE ./_RELEASE/Open\ Hexagon.app/Contents/MacOS
-        cp macos/launcher.sh _RELEASE/Open\ Hexagon.app/Contents/MacOS
-        cp macos/icon.icns _RELEASE/Open\ Hexagon.app/Contents/Resources
-        cp macos/Info.plist _RELEASE/Open\ Hexagon.app/Contents/
+        mkdir -p ./_RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp -R ./_RELEASE ./_RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/launcher.sh _RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/icon.icns _RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp macos/Info.plist _RELEASE/Open\ Hexagon.app/Contents/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
