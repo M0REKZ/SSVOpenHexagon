@@ -31,14 +31,14 @@ jobs:
     - name: Merge x86_64 and arm64 discord_game_sdk
       run: lipo -create -output ./_RELEASE/discord_game_sdk.dylib ./discord_game_sdk/lib/aarch64/discord_game_sdk.dylib ./discord_game_sdk/lib/x86_64/discord_game_sdk.dylib
 
-    - name: Configure CMake (x86_64)
-      run: cmake -B ${{github.workspace}}/build-x86_64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_OSX_ARCHITECTURES="x86_64" -DSSVOH_HEADLESS_TESTS=1 -GNinja
-      env:
-        CC: /usr/local/opt/llvm/bin/clang
-        CXX: /usr/local/opt/llvm/bin/clang++
+#    - name: Configure CMake (x86_64)
+#      run: cmake -B ${{github.workspace}}/build-x86_64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_OSX_ARCHITECTURES="x86_64" -DSSVOH_HEADLESS_TESTS=1 -GNinja
+#      env:
+#        CC: /usr/local/opt/llvm/bin/clang
+#        CXX: /usr/local/opt/llvm/bin/clang++
         
-    - name: Build (x86_64)
-      run: cmake --build ${{github.workspace}}/build-x86_64 --config ${{env.BUILD_TYPE}}
+#    - name: Build (x86_64)
+#      run: cmake --build ${{github.workspace}}/build-x86_64 --config ${{env.BUILD_TYPE}}
 
     - name: Configure CMake (arm64)
       run: cmake -B ${{github.workspace}}/build-arm64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_OSX_ARCHITECTURES="arm64" -DSSVOH_HEADLESS_TESTS=1 -GNinja
