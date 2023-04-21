@@ -45,11 +45,19 @@ jobs:
         install_name_tool -add_rpath Frameworks _RELEASE/SSVOpenHexagon
         install_name_tool -add_rpath . _RELEASE/SSVOpenHexagon
 
+    - name: Make app bundle
+      run: |
+        mkdir -p ./_RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp -R ./_RELEASE ./_RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/launcher.sh _RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/icon.icns _RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp macos/Info.plist _RELEASE/Open\ Hexagon.app/Contents/
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
         name: OpenHexagon-OSX
-        path: _RELEASE
+        path: _RELEASE/Open\ Hexagon.app
 
     - name: Run tests
       run: |
