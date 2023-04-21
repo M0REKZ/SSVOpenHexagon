@@ -27,21 +27,35 @@ jobs:
       uses: hendrikmuhs/ccache-action@v1
       with:
         key: OSX-RELEASE
+    
+    - name: Merge x86_64 and arm64 discord_game_sdk
+      run: lipo -create -output ./_RELEASE/discord_game_sdk.dylib ./discord_game_sdk/lib/aarch64/discord_game_sdk.dylib ./discord_game_sdk/lib/x86_64/discord_game_sdk.dylib
 
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DSSVOH_HEADLESS_TESTS=1 -GNinja
+    - name: Configure CMake (x86_64)
+      run: cmake -B ${{github.workspace}}/build-x86_64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_OSX_ARCHITECTURES="x86_64" -DSSVOH_HEADLESS_TESTS=1 -GNinja
+      env:
+        CC: /usr/local/opt/llvm/bin/clang
+        CXX: /usr/local/opt/llvm/bin/clang++
+        
+    - name: Build (x86_64)
+      run: cmake --build ${{github.workspace}}/build-x86_64 --config ${{env.BUILD_TYPE}}
+
+    - name: Configure CMake (arm64)
+      run: cmake -B ${{github.workspace}}/build-arm64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_OSX_ARCHITECTURES="arm64" -DSSVOH_HEADLESS_TESTS=1 -GNinja
       env:
         CC: /usr/local/opt/llvm/bin/clang
         CXX: /usr/local/opt/llvm/bin/clang++
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Build (arm64)
+      run: cmake --build ${{github.workspace}}/build-arm64 --config ${{env.BUILD_TYPE}}
     
-
+    - name: Merge x86_64 and arm64 OpenHexagon binaries
+      run: |
+        lipo -create -output ./_RELEASE/SSVOpenHexagon ./build-x86_64/SSVOpenHexagon ./build-arm64/SSVOpenHexagon
+        lipo -create -output ./_RELEASE/OHWorkshopUploader ./build-x86_64/OHWorkshopUploader ./build-arm64/OHWorkshopUploader
     - name: Copy artifacts
       run: |
-        cp build/SSVOpenHexagon build/OHWorkshopUploader _RELEASE
-        cp -r build/_deps/sfml-src/extlibs/libs-osx/Frameworks _RELEASE
+        cp -r build-x86_64/_deps/sfml-src/extlibs/libs-osx/Frameworks _RELEASE
         install_name_tool -add_rpath Frameworks _RELEASE/SSVOpenHexagon
         install_name_tool -add_rpath . _RELEASE/SSVOpenHexagon
 
@@ -51,9 +65,16 @@ jobs:
         name: OpenHexagon-OSX
         path: _RELEASE
 
-    - name: Run tests
+    - name: Run tests (x86_64)
       run: |
-        mkdir -p build/test
-        cp _RELEASE/*.dylib build/test
-        cp -R _RELEASE/Packs build/test
-        ninja -C build check
+        mkdir -p build-x86_64/test
+        cp _RELEASE/*.dylib build-x86_64/test
+        cp -R _RELEASE/Packs build-x86_64/test
+        ninja -C build-x86_64 check
+
+    - name: Run tests (arm64)
+      run: |
+        mkdir -p build-arm64/test
+        cp _RELEASE/*.dylib build-arm64/test
+        cp -R _RELEASE/Packs build-arm64/test
+        ninja -C build-arm64 check
