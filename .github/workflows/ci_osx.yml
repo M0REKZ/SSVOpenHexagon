@@ -47,17 +47,17 @@ jobs:
 
     - name: Make app bundle
       run: |
-        mkdir -p ./Open\ Hexagon.app/Contents/Resources
-        cp -R ./_RELEASE ./Open\ Hexagon.app/Contents/MacOS
-        cp macos/launcher.sh Open\ Hexagon.app/Contents/MacOS
-        cp macos/icon.icns Open\ Hexagon.app/Contents/Resources
-        cp macos/Info.plist Open\ Hexagon.app/Contents/
+        mkdir -p ./MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp -R ./_RELEASE ./MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/launcher.sh MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/MacOS
+        cp macos/icon.icns MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/Resources
+        cp macos/Info.plist MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
         name: OpenHexagon-OSX
-        path: Open Hexagon.app
+        path: MACOS_APP_RELEASE
 
     - name: Run tests
       run: |
