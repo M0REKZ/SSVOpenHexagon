@@ -38,23 +38,24 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     
 
-    - name: Copy artifacts
+    - name: Copy artifacts and make app bundle
       run: |
-        cp build/SSVOpenHexagon build/OHWorkshopUploader _RELEASE
-        cp -r build/_deps/sfml-src/extlibs/libs-osx/Frameworks _RELEASE
-        install_name_tool -add_rpath Frameworks _RELEASE/SSVOpenHexagon
-        install_name_tool -add_rpath . _RELEASE/SSVOpenHexagon
-
-    - name: Make app bundle
-      run: |
-        mkdir -p ./MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/Resources
-        cp -R ./_RELEASE ./MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/MacOS
-        cp macos/launcher.sh MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/MacOS
-        cp macos/icon.icns MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/Resources
-        cp macos/Info.plist MACOS_APP_RELEASE/Open\ Hexagon.app/Contents/
+        cd ./_RELEASE/
+        mkdir -p ./Open\ Hexagon.app/Contents/Resources
+        mkdir ./Open\ Hexagon.app/Contents/MacOS
+        cp ../build/SSVOpenHexagon ../build/OHWorkshopUploader Open\ Hexagon.app/Contents/MacOS
+        cp -r ../build/_deps/sfml-src/extlibs/libs-osx/Frameworks Open\ Hexagon.app/Contents/MacOS
+        cp Assets ConfigOverrides Packs config.json scores.json users.json Open\ Hexagon.app/Contents/MacOS
+        cp discord_game_sdk.dylib libsdkencryptedappticket.dylib libsteam_api.dylib Open\ Hexagon.app/Contents/MacOS
+        cp macos/launcher.sh Open\ Hexagon.app/Contents/MacOS
+        cp macos/icon.icns Open\ Hexagon.app/Contents/Resources
+        cp macos/Info.plist Open\ Hexagon.app/Contents/
+        install_name_tool -add_rpath Frameworks Open\ Hexagon.app/Contents/MacOS/SSVOpenHexagon
+        install_name_tool -add_rpath . Open\ Hexagon.app/Contents/MacOS/SSVOpenHexagon
+        cd ..
         
     - name: Put build in Tar
-      run: tar cvf MACOS_APP_RELEASE.tar MACOS_APP_RELEASE
+      run: tar cvf MACOS_APP_RELEASE.tar ./_RELEASE/Open\ Hexagon.app
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
