@@ -42,7 +42,7 @@ jobs:
       run: |
         cd ./_RELEASE/
         mkdir -p ./Open\ Hexagon.app/Contents/Resources
-        mkdir ./Open\ Hexagon.app/Contents/MacOS
+        mkdir ./Open\ Hexagon.app/Contents/MacOS ./Open\ Hexagon.app/Contents/MacOS/Profiles ./Open\ Hexagon.app/Contents/MacOS/Replays
         cp ../build/SSVOpenHexagon ../build/OHWorkshopUploader Open\ Hexagon.app/Contents/MacOS
         cp -r ../build/_deps/sfml-src/extlibs/libs-osx/Frameworks Assets ConfigOverrides Packs Open\ Hexagon.app/Contents/MacOS
         cp config.json scores.json users.json discord_game_sdk.dylib libsdkencryptedappticket.dylib libsteam_api.dylib Open\ Hexagon.app/Contents/MacOS
