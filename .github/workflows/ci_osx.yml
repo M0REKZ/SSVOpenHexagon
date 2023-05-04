@@ -53,14 +53,14 @@ jobs:
         install_name_tool -add_rpath . Open\ Hexagon.app/Contents/MacOS/SSVOpenHexagon
         cd ..
         
-    - name: Put build in Tar
-      run: tar cvf MACOS_APP_RELEASE.tar ./_RELEASE/Open\ Hexagon.app
+    - name: Put build in Zip
+      run: zip -r MACOS_APP_RELEASE.zip ./_RELEASE/Open\ Hexagon.app
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
         name: OpenHexagon-OSX
-        path: MACOS_APP_RELEASE.tar
+        path: MACOS_APP_RELEASE.zip
 
     - name: Run tests
       run: |
