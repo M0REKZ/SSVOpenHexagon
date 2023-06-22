@@ -29,7 +29,7 @@ jobs:
         key: OSX-RELEASE
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DSSVOH_HEADLESS_TESTS=1 -GNinja
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DSSVOH_HEADLESS_TESTS=1 -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64 -GNinja
       env:
         CC: /usr/local/opt/llvm/bin/clang
         CXX: /usr/local/opt/llvm/bin/clang++
