@@ -28,6 +28,9 @@ jobs:
       with:
         key: OSX-RELEASE
 
+    - name: Merge x86_64 and arm64 discord_game_sdk
+      run: lipo -create -output ./_RELEASE/discord_game_sdk.dylib ./discord_game_sdk/lib/aarch64/discord_game_sdk.dylib ./discord_game_sdk/lib/x86_64/discord_game_sdk.dylib
+
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DSSVOH_HEADLESS_TESTS=1 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -GNinja
       env:
