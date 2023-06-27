@@ -14,6 +14,22 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    
+    # Homebrew fails to upgrade python due to unlinking failure
+    # https://github.com/actions/setup-python/issues/577
+    - name: Fix python homebrew installation
+      run: |
+        rm -f /usr/local/bin/2to3
+        rm -f /usr/local/bin/idle3
+        rm -f /usr/local/bin/pydoc3
+        rm -f /usr/local/bin/python3
+        rm -f /usr/local/bin/python3-config
+        rm -f /usr/local/bin/2to3-3.11
+        rm -f /usr/local/bin/idle3.11
+        rm -f /usr/local/bin/pydoc3.11
+        rm -f /usr/local/bin/python3.11
+        rm -f /usr/local/bin/python3.11-config
+    
     - name: Install macOS Tools
       run: |
         brew update
